@@ -1,0 +1,158 @@
+// One file for all five section screens — ponytail: each screen is a
+// small stateless widget, not worth splitting into separate files yet.
+// Split out if any screen grows real complexity/state of its own.
+
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'cv_data.dart';
+
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        CircleAvatar(
+          radius: 48,
+          child: Text(
+            CvData.name.substring(0, 1),
+            style: const TextStyle(fontSize: 36),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(CvData.name, style: Theme.of(context).textTheme.headlineMedium),
+        Text(CvData.tagline, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 24),
+        Text(CvData.about, style: Theme.of(context).textTheme.bodyLarge),
+      ],
+    );
+  }
+}
+
+class ExperienceScreen extends StatelessWidget {
+  const ExperienceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: CvData.experience.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final job = CvData.experience[index];
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(job.title, style: Theme.of(context).textTheme.titleLarge),
+                Text('${job.company} · ${job.period}',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 8),
+                for (final h in job.highlights)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text('• $h'),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class SkillsScreen extends StatelessWidget {
+  const SkillsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        for (final group in CvData.skills)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(group.category, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final skill in group.items) Chip(label: Text(skill)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class EducationScreen extends StatelessWidget {
+  const EducationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: CvData.education.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final degree = CvData.education[index];
+        return Card(
+          child: ListTile(
+            title: Text(degree.degree),
+            subtitle: Text('${degree.school} · ${degree.period}'),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ContactScreen extends StatelessWidget {
+  const ContactScreen({super.key});
+
+  Future<void> _open(String url) => launchUrl(Uri.parse(url));
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        ListTile(
+          leading: const Icon(Icons.email),
+          title: const Text('Email'),
+          subtitle: Text(CvData.email),
+          onTap: () => _open('mailto:${CvData.email}'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.phone),
+          title: const Text('Phone'),
+          subtitle: Text(CvData.phone),
+          onTap: () => _open('tel:${CvData.phone}'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.link),
+          title: const Text('LinkedIn'),
+          onTap: () => _open(CvData.linkedInUrl),
+        ),
+        ListTile(
+          leading: const Icon(Icons.code),
+          title: const Text('GitHub'),
+          onTap: () => _open(CvData.githubUrl),
+        ),
+      ],
+    );
+  }
+}

@@ -1,0 +1,63 @@
+name: CV App CI/CD
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'cv_app/**'
+      - '.github/workflows/cv_app.yml'
+  pull_request:
+    paths:
+      - 'cv_app/**'
+
+defaults:
+  run:
+    working-directory: cv_app
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  deploy-web:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      # ponytail: base-href assumes GitHub Pages is served from the
+      # gh-pages branch at repo-root for a project page named "cv_app".
+      # Adjust if Pages is configured differently.
+      - run: flutter build web --base-href /cv_app/
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: cv_app/build/web
+          publish_branch: gh-pages
+
+  release-apk:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: cv_app/build/app/outputs/flutter-apk/app-release.apk

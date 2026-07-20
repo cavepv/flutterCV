@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Multi-OS App Development Crash Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2e;
+            color: #cdd6f4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #89b4fa 0%, #cba6f7 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background-color: #313244;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .nav-title {
+            color: #89b4fa;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #cdd6f4;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background-color: #45475a;
+            padding-left: 20px;
+        }
+
+        .nav-item.active {
+            background-color: #89b4fa;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            background-color: #313244;
+            border-radius: 16px;
+            padding: 2.5rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: #89b4fa;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #45475a;
+        }
+
+        /* Content Styles */
+        .section-content {
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1.2rem;
+        }
+
+        /* Code Blocks */
+        code {
+            background-color: #45475a;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            color: #f9e2af;
+        }
+
+        pre {
+            background-color: #181825;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin-bottom: 1.2rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .code-header {
+            background-color: #45475a;
+            padding: 8px 16px;
+            border-radius: 10px 10px 0 0;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Code blocks with syntax highlighting */
+        .python-code { color: #e5c07b; }
+        .dart-keyword { color: #fab387; }
+        .dart-function { color: #89b4fa; }
+        .dart-string { color: #a6e3a1; }
+        .dart-class { color: #f38ba8; }
+
+        /* Interactive Examples */
+        .interactive-example {
+            background-color: #181825;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .example-header {
+            background-color: #45475a;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-weight: bold;
+            border-bottom: 1px solid #f9e2af;
+        }
+
+        .example-body {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .counter-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #89b4fa;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background-color: #89b4fa;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #b4befe;
+            transform: translateY(-2px);
+        }
+
+        .secondary-btn {
+            background-color: #f38ba8;
+            color: white;
+        }
+
+        .secondary-btn:hover {
+            background-color: #eba0ac;
+            transform: translateY(-2px);
+        }
+
+        /* Widget Visualization */
+        .widget-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .widget-node {
+            background-color: #45475a;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .widget-node::after {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            height: 2rem;
+            width: 2px;
+            background-color: #6c7086;
+            transform: translateX(-50%);
+        }
+
+        .widget-node::before {
+            content: '';
+            position: absolute;
+            top: -1rem;
+            left: 50%;
+            height: 2px;
+            width: calc(50% - 4rem);
+            background-color: #6c7086;
+        }
+
+        .widget-node:last-child::before {
+            display: none;
+        }
+
+        /* Platform Diagram */
+        .platform-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .platform-box {
+            background-color: #45475a;
+            padding: 2rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            position: relative;
+        }
+
+        .platform-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background-color: #45475a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .question {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #313244;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #cdd6f4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .option {
+            padding: 1rem;
+            background-color: #313244;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option:hover {
+            background-color: #45475a;
+        }
+
+        .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #89b4fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option.selected .radio {
+            background-color: #89b4fa;
+        }
+
+        .option.selected .radio::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #a6e3a1;
+            color: #26272b;
+        }
+
+        .feedback.incorrect {
+            background-color: #f38ba8;
+            color: white;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #45475a;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: #cdd6f4;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background-color: #313244;
+            font-weight: bold;
+            transform: translateY(-1px);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .checklist-item {
+            padding: 1rem;
+            background-color: #45475a;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .checklist-item:hover {
+            background-color: #585b70;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #89b4fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checklist-item.completed .checkbox {
+            background-color: #a6e3a1;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .platform-diagram {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: #313244;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            border-top: 2px solid #6c7086;
+        }
+
+        .footer-content {
+            color: #a6adc8;
+            font-size: 0.9rem;
+        }
+
+        /* Tips Section */
+        .tip-box {
+            background-color: #45475a;
+            border-left: 4px solid #fab387;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-title {
+            color: #fab387;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Flutter Multi-OS App Development Crash Course</h1>
+        <p>Learn to build cross-platform applications for mobile, web, and desktop</p>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="nav-title">Course Content</div>
+            
+            <div class="nav-item active" onclick="showSection('intro')">Introduction</div>
+            <div class="nav-item" onclick="showSection('architecture')">Architecture</div>
+            <div class="nav-item" onclick="showSection('widgets')">Widget System</div>
+            <div class="nav-item" onclick="showSection('state')">State Management</div>
+            <div class="nav-item" onclick="showSection('platforms')">Platform-Specific Code</div>
+            <div class="nav-item" onclick="showSection('navigation')">Navigation & Routing</div>
+            <div class="nav-item" onclick="showSection('practical')">Practical Development</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Introduction Section -->
+            <section id="intro" class="section">
+                <h2 class="section-title">Introduction to Flutter</h2>
+                
+                <div class="section-content">
+                    <p>Flutter is Google's modern, open-source UI toolkit for building beautiful, natively compiled applications for mobile, web, desktop, and embedded devices from a single codebase.</p>
+                    
+                    <h3>Why Choose Flutter?</h3>
+                    <ul>
+                        <li><strong>Cross-Platform Development:</strong> Write once, run on Android, iOS, Windows, macOS, Linux, and web</li>
+                        <li><strong>Fast Development:</strong> Hot reload for instant feedback on code changes</li>
+                        <li><strong>Expressive & Flexible UI:</strong> Customizable widgets for any platform</li>
+                        <li><strong>Native Performance:</strong> Compiled to native ARM code with no bridging overhead</li>
+                        <li><strong>Single Codebase:</strong> Reduce development time and maintenance costs</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-title">💡 Did You Know?</div>
+                        Flutter apps are compiled to native ARM code using the Dart VM, not web technologies like JavaScript. This gives them excellent performance across all platforms.
+                    </div>
+                    
+                    <h3>Flutter's Architecture</h3>
+                    <p>Flutter has a layered architecture:</p>
+                    
+                    <div class="widget-tree">
+                        <div class="tree-level">
+                            <div class="widget-node">Flutter App (Dart)</div>
+                        </div>
+                        <div class="tree-level">
+                            <div class="widget-node" style="flex: 1;">Flutter Framework</div>
+                            <div class="widget-node" style="flex: 1;">Binding Layer</div>
+                        </div>
+                        <div class="tree-level">
+                            <div class="widget-node">ENGINE (C++/Skia)</div>
+                        </div>
+                        <div class="tree-level">
+                            <div class="widget-node" style="width: 300px;">Embedder (Platform-specific)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <div class="tip-title">🚀 Getting Started</div>
+                        1. Install Flutter SDK from flutter.dev<br>
+                        2. Run <code>flutter doctor</code> to check setup<br>
+                        3. Create a new project: <code>flutter create my_app</code><br>
+                        4. Start coding!
+                    </div>
+                </div>
+
+                <!-- Interactive Counter Example -->
+                <h3>Interactive Counter Example</h3>
+                <div class="interactive-example">
+                    <div class="example-header">Counter App (Click buttons to interact)</div>
+                    <div class="example-body">
+                        <div id="counter-display" class="counter-display">0</div>
+                        <div class="btn-group">
+                            <button class="primary-btn" onclick="incrementCounter()">Increment (+)</button>
+                            <button class="secondary-btn" onclick="resetCounter()">Reset (0)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Sample -->
+                <h3>Sample Flutter App</h3>
+                <pre><code><span class="dart-keyword">import</span> <span class="dart-string">'package:flutter/material.dart'</span>;
+
+<span class="dart-class">void</span> main() {
+  runApp(<span class="dart-function">MyApp</span>());
+}
+
+<span class="dart-class">class</span> <span class="dart-class">MyApp</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> MaterialApp(
+      title: <span class="dart-string">'Flutter Demo'</span>,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: <span class="dart-class">MyHomePage</span>(),
+    );
+  }
+}</code></pre>
+            </section>
+
+            <!-- Architecture Section -->
+            <section id="architecture" class="section">
+                <h2 class="section-title">Flutter Architecture</h2>
+                
+                <div class="section-content">
+                    <p>Flutter's architecture consists of four main layers:</p>
+                    
+                    <div class="platform-diagram">
+                        <div class="platform-box">
+                            <div class="platform-icon">@</div>
+                            <strong>iOS</strong>
+                        </div>
+                        <div class="platform-box" style="border: 2px solid #f9e2af;">
+                            <div class="platform-icon">📱</div>
+                            <strong>Flutter Engine</strong>
+                        </div>
+                        <div class="platform-box">
+                            <div class="platform-icon">$</div>
+                            <strong>Android</strong>
+                        </div>
+                    </div>
+
+                    <h3>The Four Layers</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>1. Embedder</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Platform-specific code that handles rendering surface, threading, and platform integrations.</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>2. Engine</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">C++ code that provides high-performance rendering using Skia graphics library.</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>3. Framework</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Dart UI framework with widgets, rendering, gestures, and animation.</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>4. Apps</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Your Dart code implementing the Flutter app logic and UI.</p>
+                        </div>
+                    </div>
+
+                    <h3>How It Works Together</h3>
+                    
+                    <pre><code><span class="dart-keyword">void</span> main() {
+  runApp(<span class="dart-class">MyApp</span>());
+}
+
+<span class="dart-class">class</span> <span class="dart-class">MyApp</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text(<span class="dart-string">'Flutter App'</span>)),
+        body: Center(child: Text(<span class="dart-string">'Hello, Cross-Platform!'</span>)),
+      ),
+    );
+  }
+}</code></pre>
+
+                    <div class="tip-box">
+                        <div class="tip-title">💡 Architecture Insight</div>
+                        The Flutter framework is written in Dart and the engine is written in C++ with Skia. Your app code runs alongside the framework, all compiled to native ARM code for maximum performance.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Widget System Section -->
+            <section id="widgets" class="section">
+                <h2 class="section-title">The Widget System</h2>
+                
+                <div class="section-content">
+                    <p>In Flutter, <strong>everything is a widget</strong>. This includes buttons, text, layouts, and even the app itself. Widgets are the fundamental building blocks of Flutter UI.</p>
+                    
+                    <h3>Types of Widgets</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                        <div class="widget-node" style="background-color: #2a9d8f;">
+                            <strong>StatelessWidget</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Widgets that don't change after they are built. Examples: Text, Icon, Container.</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #e76f51;">
+                            <strong>StatefulWidget</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Widgets that can change over time in response to user input or data changes.</p>
+                        </div>
+                    </div>
+
+                    <h3>Widget Tree Hierarchy</h3>
+                    
+                    <pre><code><span class="dart-class">MyApp</span>
+└── MaterialApp
+    └── Scaffold
+        ├── AppBar (with Title)
+        └── body: Center
+            └── Column
+                ├── Text(
+                │   <span class="dart-string">'You have pushed the button'</span>
+                │ )
+                └── Text(<span class="dart-string">'$counter'</span>)</code></pre>
+
+                    <h3>Common Widgets</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Text</strong>
+                            <p>Display text strings</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Container</strong>
+                            <p>Padded, positioned, styled widgets</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Row/Column</strong>
+                            <p>Vertical and horizontal layouts</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Stack</strong>
+                            <p>Position widgets on top of each other</p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Widget Example -->
+                    <h3>Interactive: Custom Widget Demo</h3>
+                    <div class="interactive-example">
+                        <div class="example-header">Widget Interactions (Try clicking the buttons!)</div>
+                        <div class="example-body" style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                            <div>
+                                <h4>Text Widget</h4>
+                                <p id="text-display" style="font-size: 1.5rem; color: #89b4fa;">Hello Flutter!</p>
+                                <button class="primary-btn" onclick="changeText()" style="margin-top: 0.5rem;">Change Text</button>
+                            </div>
+                            
+                            <div>
+                                <h4>Container Widget</h4>
+                                <div id="container-display" style="width: 120px; height: 120px; background-color: #89b4fa; border-radius: 12px; display: flex; align-items: center; justify-content: center;"></div>
+                                <button class="primary-btn" onclick="changeContainer()" style="margin-top: 0.5rem;">Change Container</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Building Custom Widgets</h3>
+                    
+                    <pre><code><span class="dart-class">class</span> <span class="dart-class">CustomButton</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  final String label;
+  final VoidCallback onPressed;
+
+  <span class="dart-class">CustomButton</span>({<span class="dart-class">required</span> <span class="this">this</span>.label, <span class="dart-keyword">required</span> <span class="this">this</span>.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> ElevatedButton(
+      onPressed: onPressed,
+      child: Text(label),
+      style: ElevatedButton.styleFrom(primary: Colors.blue),
+    );
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- State Management Section -->
+            <section id="state" class="section">
+                <h2 class="section-title">State Management</h2>
+                
+                <div class="section-content">
+                    <p>State management is how you handle data that changes over time in your app. Flutter provides several approaches, from simple to complex.</p>
+
+                    <h3>Understanding State</h3>
+                    
+                    <p><strong>Ephemeral State:</strong> State that can be managed locally within a widget (using setState).</p>
+                    <p><strong>App State:</strong> User data or app-wide state that needs to be shared across multiple widgets.</p>
+
+                    <!-- Interactive Counter Example -->
+                    <h3>Interactive: Local State with setState()</h3>
+                    <div class="interactive-example">
+                        <div class="example-header">Counter App - Local State Management</div>
+                        <div class="example-body">
+                            <div id="local-counter-display" class="counter-display">0</div>
+                            <p style="margin: 1rem;">Try adding items to a list and displaying them!</p>
+                            
+                            <h4>My Todo List:</h4>
+                            <ul id="todo-list" style="list-style-type: none; padding: 0; max-width: 400px; margin: 0 auto;">
+                                <!-- Empty initially -->
+                            </ul>
+
+                            <div class="btn-group" style="margin-top: 2rem;">
+                                <button class="primary-btn" onclick="incrementLocalCounter()">Add Todo</button>
+                                <button class="secondary-btn" onclick="resetLocalState()">Clear List</button>
+                            </div>
+
+                            <pre id="local-counter-code"><code><span class="dart-class">class</span> <span class="dart-class">MyHomePage</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatefulWidget</span> {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+<span class="dart-class">class</span> _<span class="dart-class">MyHomePageState</span> <span class="dart-keyword">extends</span> <span class="dart-class">State</span>&lt;<span class="dart-class">MyHomePage</span>&gt; {
+  <span class="dart-keyword">int</span> counter = 0;
+  List<String> todos = [];
+
+  <span class="dart-function">void</span> _incrementCounter() {
+    setState(() {
+      counter++;
+      todos.add(<span class="dart-string">'Todo item ${counter}'</span>);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> Scaffold(
+      appBar: AppBar(title: Text(<span class="dart-string">'Local State'</span>)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(<span class="dart-string">'You have ${counter} todos:'</span>),
+            ...todos.map((todo) => Text(todo)).toList(),
+          ],
+        ),
+      ),
+      floatingActionButton:
+        FloatingActionButton(onPressed: _incrementCounter),
+    );
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>State Management Options</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>setState()</strong>
+                            <p>Simple local state management for single widgets</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Provider</strong>
+                            <p>Simple dependency injection and state management</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Riverpod</strong>
+                            <p>Type-safe state management with provider pattern</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>BLoC</strong>
+                            <p>Business Logic Component pattern for complex apps</p>
+                        </div>
+                    </div>
+
+                    <h3>Simple State Management with Provider</h3>
+                    
+                    <pre><code><span class="dart-keyword">import</span> <span class="dart-string">'package:flutter/material.dart'</span>;
+<span class="dart-keyword">import</span> <span class="dart-string">'package:provider/provider.dart'</span>;
+
+<span class="dart-class">class</span> <span class="dart-class">Counter</span> <span class="dart-keyword">extends</span> <span class="dart-class">ChangeNotifier</span> {
+  <span class="dart-keyword">int</span> _count = 0;
+  
+  <span class="keyword">int get count => _count;</span>
+  
+  <span class="dart-function">void</span> increment() {
+    _count++;
+    notifyListeners();
+  }
+}
+
+<span class="dart-class">class</span> <span class="dart-class">MyApp</span> <span class="dart-keyword">extends</span> <span class="dart-class"> StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> ChangeNotifierProvider(
+      create: (_) => <span class="dart-class">Counter</span>(),
+      child: MaterialApp(
+        home: <span class="dart-class">MyHomePage</span>(),
+      ),
+    );
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Platform-Specific Code Section -->
+            <section id="platforms" class="section">
+                <h2 class="section-title">Platform-Specific Code</h2>
+                
+                <div class="section-content">
+                    <p>Flutter allows you to write platform-specific code when needed while sharing most of your codebase across platforms.</p>
+
+                    <h3>Detecting the Platform</h3>
+                    
+                    <pre><code><span class="dart-keyword">import</span> <span class="dart-string">'dart:io'</span> show Platform;
+<span class="dart-keyword">import</span> <span class="dart-string">'dart:ui'</span>;
+
+<span class="keyword">bool get isMobile => Platform.isIOS || Platform.isAndroid;</span>
+<span class="keyword">bool get isDesktop => Platform.isLinux || Platform.isWindows || Platform.isMacOS;</span>
+<span class="keyword">bool get isWeb => !(Platform.isIOS || Platform.isAndroid || Platform.isLinux || Platform.isWindows || Platform.isMacOS);</span>
+
+<span class="keyword">String get platformName => Platform.operatingSystem;</span></code></pre>
+
+                    <h3>Interactive: Platform Detection Demo</h3>
+                    <div class="interactive-example">
+                        <div class="example-header">Platform Detection (Try opening in different environments!)</div>
+                        <div class="example-body">
+                            <h4 style="margin-bottom: 1rem;">Detected Platform:</h4>
+                            <div id="platform-display" class="widget-node" style="background-color: #2a9d8f; font-size: 1.5rem; padding: 2rem;">
+                                Detecting...
+                            </div>
+
+                            <pre id="platform-code"><code><span class="dart-keyword">import</span> <span class="dart-string">'dart:io'</span> show Platform;
+
+<span class="keyword">String getPlatformName() {
+  if (Platform.isIOS) return 'iOS';
+  if (Platform.isAndroid) return 'Android';
+  if (Platform.isWindows) return 'Windows';
+  if (Platform.isLinux) return 'Linux';
+  if (Platform.isMacOS) return 'macOS';
+  if (Platform.isFuchsia) return 'Fuchsia';
+  
+  <span class="comment">// For web, check window对象</span>
+  if (JsContext.context['navigator'] != null) {
+    <span class="keyword">return</span> <span class="dart-string">'Web'</span>;
+  }
+  
+  <span class="keyword">return</span> <span class="dart-string">'Unknown'</span>;
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Platform Channels: Dart ↔ Native Communication</h3>
+                    
+                    <p>Use platform channels to communicate between Flutter and native code:</p>
+
+                    <pre><code><span class="dart-keyword">import</span> <span class="dart-string">'package:flutter/services.dart'</span>;
+
+<span class="dart-class">class</span> <span class="dart-class">PlatformServices</span> {
+  <span class="keyword">static final</span> PlatformChannel _channel = MethodChannel(<span class="dart-string">'com.example.app/platform'</span>);
+
+  <span class="dart-function">Future&lt;String?&gt;</span> getPlatformVersion() <span class="keyword">async</span> {
+    <span class="keyword">try</span> {
+      final version = await _channel.invokeMethod(<span class="dart-string">'getPlatformVersion'</span>);
+      <span class="keyword">return</span> version;
+    } <span class="keyword">catch</span> (e) {
+      <span class="keyword">return</span> <span class="null">null</span>;
+    }
+  }
+
+  <span class="dart-function">Future&lt;void&gt;</span> showToast(String message) <span class="keyword">async</span> {
+    <span class="keyword">await</span> _channel.invokeMethod(<span class="dart-string">'showToast'</span>, {'message': message});
+  }
+}</code></pre>
+
+                    <!-- Native Code Examples -->
+                    <h3>Native Code Integration</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Android (Kotlin)</strong>
+                            <pre><code><span class="keyword">import</span> io.flutter.embedding.engine.platform.PlatformMessageHandler
+
+<span class="keyword">class</span> FlutterActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        GeneratedPluginRegistrant.registerBuffer(this)
+        
+        PlatformChannel.setPlatformMessageHandler { message, response ->
+            <span class="keyword">when</span> (message) {
+                <span class="string">'showToast'</span> -> {
+                    Toast.makeText(this, response.getString(<span class="string">'message'</span>), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>iOS (Swift)</strong>
+                            <pre><code><span class="keyword">import</span> Flutter
+
+<span class="class">@objc</span>(<span class="class">FlutterPlugin</span>)
+<span class="class">class</span> <span class="class">MyPlugin</span>: NSObject, FlutterPlugin {
+    <span class="keyword">func</span> handle(method: String, arguments: [String: Any]?, response: FlutterResult) {
+        <span class="keyword">switch</span> method {
+        <span class="keyword">case</span> <span class="string">'showToast'</span>:
+            guard let message = arguments?[<span class="string">'message'</span>] <span class="keyword">as</span>? String <span class="keyword">else</span> { <span class="keyword">return</span> }
+            showToast(message: message)
+        default:
+            break
+        }
+    }
+
+    <span class="keyword">func</span> showToast(message: String) {
+        let alert = UIAlertController(title: <span class="string'>"Info"</span>, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: <span class="string\">"OK"</span>, style: .default))
+        UIApplication.shared.window?.rootViewController?.present(alert, animated: true)
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Platform-Specific UI</h3>
+                    
+                    <p>You can build platform-specific UI components that follow the platform's design guidelines:</p>
+
+                    <pre><code><span class="dart-keyword">import</span> <span class="dart-string">'package:flutter/material.dart'</span>;
+<span class="dart-keyword">import</span> <span class="dart-string">'package:flutter/cupertino.dart'</span>;
+
+<span class="keyword">Widget</span> adaptiveWidget(BuildContext context) {
+  <span class="keyword">return DefaultTargetPlatform</span>.mapData(
+    context: context,
+    android: (_) => RaisedButton(
+      onPressed: () {},
+      child: Text(<span class="string">'Android Button'</span>),
+    ),
+    ios: (_) => CupertinoButton(
+      onPressed: () {},
+      child: Text(<span class="string">'iOS Button'</span>),
+    ),
+    macOS: (_) => ElevatedButton(
+      onPressed: () {},
+      child: Text(<span class="string">'macOS Button'</span>),
+    ),
+  );
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Navigation Section -->
+            <section id="navigation" class="section">
+                <h2 class="section-title">Navigation & Routing</h2>
+                
+                <div class="section-content">
+                    <p>Flutter provides powerful navigation tools to handle routing between different screens in your app.</p>
+
+                    <h3>Basic Navigation with Navigator</h3>
+                    
+                    <pre><code><span class="dart-class">class</span> <span class="dart-class">FirstScreen</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> Scaffold(
+      appBar: AppBar(title: Text(<span class="string">'First Screen'</span>)),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => SecondScreen()),
+            );
+          },
+          child: Text(<span class="string">'Go to Second Screen'</span>),
+        ),
+      ),
+    );
+  }
+}
+
+<span class="dart-class">class</span> <span class="dart-class">SecondScreen</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> Scaffold(
+      appBar: AppBar(title: Text(<span class="string">'Second Screen'</span>)),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(<span class="string">'Go Back'</span>),
+        ),
+      ),
+    );
+  }
+}</code></pre>
+
+                    <h3>Named Routes</h3>
+                    
+                    <p>Use named routes for better organization in larger apps:</p>
+
+                    <pre><code><span class="dart-class">class</span> <span class="dart-class">AppRoutes</span> {
+  <span class="keyword">static final</span> String firstScreen = <span class="string">'/'</span>;
+  <span class="keyword">static final</span> String secondScreen = <span class="string">'/second'</span>;
+  <span class="keyword">static final</span> String detailsScreen = <span class="string">'/details'</span>;
+}
+
+<span class="dart-class">class</span> <span class="dart-class">MyApp</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  @override
+  Widget build(BuildContext context) {
+    <span class="dart-keyword">return</span> MaterialApp(
+      initialRoute: AppRoutes.firstScreen,
+      routes: {
+        AppRoutes.firstScreen: (_) => FirstScreen(),
+        AppRoutes.secondScreen: (_) => SecondScreen(),
+        AppRoutes.detailsScreen: (_) => DetailsScreen(),
+      },
+    );
+  }
+}</code></pre>
+
+                    <h3>Interactive Example: Tab Navigation</h3>
+                    <div class="interactive-example">
+                        <div class="example-header">Tab Navigation Demo</div>
+                        
+                        <div class="tabs" style="padding-left: 2rem; padding-right: 2rem;">
+                            <button class="tab active" onclick="switchTab('home')">Home</button>
+                            <button class="tab" onclick="switchTab('profile')">Profile</button>
+                            <button class="tab" onclick="switchTab('settings')">Settings</button>
+                        </div>
+
+                        <div id="tab-home" class="tab-content active" style="padding: 2rem; text-align: center;">
+                            <h3>Home Tab Content</h3>
+                            <p>Welcome to the Home tab!</p>
+                            <p>This demonstrates Flutter's navigation system with tabs.</p>
+                        </div>
+
+                        <div id="tab-profile" class="tab-content" style="padding: 2rem; text-align: center;">
+                            <h3>Profile Tab Content</h3>
+                            <div class="widget-node" style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 80px; height: 80px; background-color: #fab387; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">👤</div>
+                                <div>
+                                    <strong>User Profile</strong>
+                                    <p>Flutter Developer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-settings" class="tab-content" style="padding: 2rem; text-align: center;">
+                            <h3>Settings Tab Content</h3>
+                            <ul style="list-style: none; display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                                <li class="widget-node">Dark Mode</li>
+                                <li class="widget-node">Notifications</li>
+                                <li class="widget-node">About</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Navigation Parameters</h3>
+                    
+                    <pre><code><span class="dart-class">class</span> <span class="dart-class">ProductDetailsScreen</span> <span class="dart-keyword">extends</span> <span class="dart-class">StatelessWidget</span> {
+  <span class="keyword">final</span> String productId;
+
+  <span class="dart-class">ProductDetailsScreen</span>({<span class="keyword">required</span> <span class="this">this</span>.productId});
+
+  @override
+  Widget build(BuildContext context) {
+    <span class="keyword">return</span> Scaffold(
+      appBar: AppBar(title: Text(<span class="string">'Product ${productId}'</span>)),
+      body: Center(child: Text(<span class="string">'Details for product: $productId'</span>)),
+    );
+  }
+}
+
+<span class="comment">// Navigate with parameters</span>
+Navigator.pushNamed(context, AppRoutes.detailsScreen, arguments: {'id': '123'});
+
+<span class="comment">// Extract parameters in the destination screen</span>
+Widget build(BuildContext context) {
+  <span class="keyword">final</span> args = ModalRoute.of(context)?.settings.arguments <span class="keyword">as</span>? Map&lt;String, dynamic&gt; ?? {};
+  <span class="keyword">final</span> productId = args['id'] ?? <span class="string">'default'</span>;
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Practical Development Section -->
+            <section id="practical" class="section">
+                <h2 class="section-title">Practical Development Guide</h2>
+                
+                <div class="section-content">
+                    <h3>Getting Started Checklist</h3>
+                    
+                    <ul class="checklist">
+                        <li class="checklist-item completed" onclick="toggleCheck(this)">
+                            <div class="checkbox">✓</div>
+                            <div>Install Flutter SDK from flutter.dev</div>
+                        </li>
+                        
+                        <li class="checklist-item completed" onclick="toggleCheck(this)">
+                            <div class="checkbox">✓</div>
+                            <div>Run flutter doctor to verify setup</div>
+                        </li>
+                        
+                        <li class="checklist-item completed" onclick="toggleCheck(this)">
+                            <div class="checkbox">✓</div>
+                            <div>Create your first project: flutter create my_app</div>
+                        </li>
+                        
+                        <li class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div>Install IDE plugin (VS Code or Android Studio)</div>
+                        </li>
+                        
+                        <li class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div>Set up emulators for testing</div>
+                        </li>
+                        
+                        <li class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checkbox"></div>
+                            <div>Create a simple todo app to practice</div>
+                        </li>
+                    </ul>
+
+                    <h3>Cross-Platform Considerations</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Mobile (iOS/Android)</strong>
+                            <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+                                <li>Use Material/Cupertino widgets</li>
+                                <li>Handle touch gestures</li>
+                                <li>Optimize for different screen sizes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Web</strong>
+                            <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+                                <li>HTML/CSS fallback rendering</li>
+                                <li>Browser compatibility</li>
+                                <li>PWA support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>Desktop (Win/macOS/Linux)</strong>
+                            <ul style="margin-top: 0.5rem; padding-left: 1.2rem;">
+                                <li>System menu integration</li>
+                                <li>File system access</li>
+                                <li>Window management</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Testing Cross-Platform Apps</h3>
+                    
+                    <pre><code><span class="dart-class">void</span> main() {
+  testWidgets(<span class="string">'Counter increments smoke test'</span>, (WidgetTester tester) <span class="keyword">async</span> {
+    <span class="comment">// Test our app on all platforms</span>
+    <span class="keyword">for</span> (final target in [TargetPlatform.android, TargetPlatform.iOS]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: Locale(<span class="string">'en'</span>, <span class="string">'US'</span>),
+          debugShowCheckedModeBanner: <span class="keyword">false</span>,
+          home: <span class="dart-class">MyHomePage</span>(),
+          platform: target,
+        ),
+      );
+
+      <span class="comment">// Verify the app works on each platform</span>
+      expect(find.text(<span class="string">'0'</span>), findsOneWidget);
+      
+      <span class="keyword">await</span> tester.tap(find.byIcon(Icons.add));
+      <span class="keyword">await</span> tester.pump();
+
+      expect(find.text(<span class="string">'1'</span>), findsOneWidget);
+    }
+  });
+}</code></pre>
+
+                    <h3>Cross-Platform Package Recommendations</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>get_it</strong>
+                            <p>Simple service locator for dependency injection</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>shared_preferences</strong>
+                            <p>Local data storage across all platforms</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>http</strong>
+                            <p>HTTP client for network requests</p>
+                        </div>
+                        
+                        <div class="widget-node" style="background-color: #45475a;">
+                            <strong>path_provider</strong>
+                            <p>Get common file system locations</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-title">💡 Pro Tips</div>
+                        
+                        <ul style="padding-left: 1.2rem;">
+                            <li><strong>Responsive Design:</strong> Use media queries and LayoutBuilder for adaptive layouts across different screen sizes</li>
+                            <li><strong>Platform Channels:</strong> Use platform channels to access native features not available in Flutter packages</li>
+                            <li><strong>Hot Reload:</strong> Learn to use hot reload (press 'r' in terminal or click the lightning bolt icon)</li>
+                            <li><strong>Performance:</strong> Wrap stateful widgets with containers when possible, use const constructors where appropriate</li>
+                        </ul>
+                    </div>
+
+                    <h3>Deployment Checklist</h3>
+                    
+                    <pre><code><span class="comment"># Build for different platforms:</span>
+flutter build apk           <span class="comment"># Android APK</span>
+flutter build ios           <span class="comment"># iOS</span>
+flutter build web           <span class="comment"># Web Application</span>
+flutter build windows       <span class="comment"># Windows executable</span>
+flutter build macos         <span class="comment"># macOS application</span>
+flutter build linux         <span class="comment"># Linux application</span>
+
+<span class="comment"># Run on specific platform:</span>
+flutter run -d chrome       <span class="comment"># Web browser</span>
+flutter run -d android      <span class="comment"># Android device/emulator</span>
+flutter run -d ios          <span class="comment"># iOS device/simulator</span></code></pre>
+
+                    <h3>Next Learning Steps</h3>
+                    
+                    <ul style="margin-left: 1rem; margin-bottom: 2rem;">
+                        <li><strong>State Management:</strong> Deep dive into Provider, Riverpod, or BLoC patterns</li>
+                        <li><strong>Animations:</strong> Learn Flutter's animation system for smooth transitions</li>
+                        <li><strong>Cross-Platform Testing:</strong> Write comprehensive tests for all platforms you support</li>
+                        <li><strong>Custom Packages:</strong> Create reusable packages for your common use cases</li>
+                    </ul>
+
+                    <div class="tip-box">
+                        <div class="tip-title">🚀 Ready to Build?</div>
+                        
+                        <p style="margin-bottom: 0.5rem;">Start your first multi-platform Flutter project today!</p>
+                        
+                        <pre><code><span class="dart-class">flutter create</span> my_cross_platform_app
+<span class="dart-class">cd</span> my_cross_platform_app
+<span class="dart-class">flutter run</span> -d all  <span class="comment"># Run on all connected devices</span></code></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>Flutter Multi-OS App Development Crash Course | Copyright 2026</p>
+            <p>Built with Flutter concepts • Cross-platform development guide</p>
+        </div>
+    </footer>
+
+    <script>
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+                selectedSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Update sidebar active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const activeItem = Array.from(document.querySelectorAll('.nav-item'))
+                .find(item => item.getAttribute('onclick') === `showSection('${sectionId}')`);
+            
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+
+            // Show the home section if no valid section
+            if (!selectedSection) {
+                document.getElementById('intro').style.display = 'block';
+            }
+        }
+
+        // Counter functionality
+        let counter = 0;
+
+        function incrementCounter() {
+            counter++;
+            document.getElementById('counter-display').textContent = counter;
+            updateCodeDisplay();
+        }
+
+        function resetCounter() {
+            counter = 0;
+            document.getElementById('counter-display').textContent = counter;
+            updateCodeDisplay();
+        }
+
+        function updateCodeDisplay() {
+            const codeElement = document.querySelector('#local-counter-code code');
+            if (codeElement) {
+                codeElement.innerHTML = codeElement.innerHTML.replace(
+                    /counter: \d+/,
+                    `counter: ${counter}`
+                );
+            }
+        }
+
+        // Interactive widget functions
+        function changeText() {
+            const textDisplay = document.getElementById('text-display');
+            const texts = ['Hello Flutter!', 'Learning Flutter is fun!', 'Cross-platform is powerful!'];
+            const currentText = textDisplay.textContent;
+            const nextIndex = (texts.indexOf(currentText) + 1) % texts.length;
+            textDisplay.textContent = texts[nextIndex];
+        }
+
+        function changeContainer() {
+            const containerDisplay = document.getElementById('container-display');
+            const colors = ['#89b4fa', '#fab387', '#a6e3a1', '#f9e2af', '#b4befe'];
+            const currentColor = containerDisplay.style.backgroundColor;
+            const nextIndex = (colors.indexOf(currentColor) + 1) % colors.length;
+            containerDisplay.style.backgroundColor = colors[nextIndex];
+        }
+
+        // Local counter state
+        let localCounter = 0;
+        let todos = [];
+
+        function incrementLocalCounter() {
+            localCounter++;
+            todos.push(`Todo item ${localCounter}`);
+            
+            document.getElementById('local-counter-display').textContent = localCounter;
+            
+            // Update todo list
+            const todoList = document.getElementById('todo-list');
+            const todoItem = document.createElement('li');
+            todoItem.textContent = `• ${todos[todos.length - 1]}`;
+            todoList.appendChild(todoItem);
+        }
+
+        function resetLocalState() {
+            localCounter = 0;
+            todos = [];
+            
+            document.getElementById('local-counter-display').textContent = 0;
+            document.getElementById('todo-list').innerHTML = '';
+        }
+
+        // Platform detection
+        function detectPlatform() {
+            let platformInfo = 'Detecting...';
+            
+            if (typeof navigator === 'undefined') {
+                platformInfo = 'Server-side environment';
+            } else if (navigator.userAgent) {
+                const ua = navigator.userAgent.toLowerCase();
+                
+                if (ua.indexOf('android') > -1) {
+                    platformInfo = 'Android';
+                } else if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1) {
+                    platformInfo = 'iOS';
+                } else if (ua.indexOf('mac os x') > -1 && navigator.appVersion.indexOf('KHTML, like Gecko') > -1) {
+                    platformInfo = 'macOS';
+                } else if (ua.indexOf('windows nt') > -1) {
+                    platformInfo = 'Windows';
+                } else if (ua.indexOf('linux') > -1) {
+                    platformInfo = 'Linux';
+                } else if (ua.indexOf('web') > -1) {
+                    platformInfo = 'Web';
+                }
+            }
+
+            document.getElementById('platform-display').textContent = platformInfo;
+            
+            // Update the code display to show detected platform
+            const platformCode = document.getElementById('platform-code');
+            if (platformCode) {
+                let commentText = '';
+                switch(platformInfo) {
+                    case 'Android': commentText = "// Detected: Android device"; break;
+                    case 'iOS': commentText = "// Detected: iOS device"; break;
+                    case 'Windows': commentText = "// Detected: Windows desktop"; break;
+                    case 'Linux': commentText = "// Detected: Linux system"; break;
+                    case 'macOS': commentText = "// Detected: macOS system"; break;
+                    case 'Web': commentText = "// Detected: Web browser"; break;
+                }
+            }
+        }
+
+        // Tab navigation
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show selected tab content
+            const activeContent = document.getElementById(`tab-${tabName}`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
+
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            const activeTab = Array.from(document.querySelectorAll('.tab'))
+                .find(tab => tab.getAttribute('onclick') === `switchTab('${tabName}')`);
+            
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+
+        // Checklist functionality
+        function toggleCheck(item) {
+            item.classList.toggle('completed');
+            
+            const checkbox = item.querySelector('.checkbox');
+            if (item.classList.contains('completed')) {
+                checkbox.textContent = '✓';
+            } else {
+                checkbox.textContent = '';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('intro');
+            detectPlatform();
+            
+            // Add more platform detection examples to the platform code
+            const exampleCode = `// Platform detection example:
+<span class="dart-keyword">import</span> <span class="dart-string">'dart:io'</span>;
+
+<span class="keyword">String getPlatformName() {
+  if (Platform.isIOS) return 'iOS';
+  if (Platform.isAndroid) return 'Android';
+  if (Platform.isWindows) return 'Windows';
+  if (Platform.isLinux) return 'Linux';
+  if (Platform.isMacOS) return 'macOS';
+  
+  <span class="keyword">return</span> <span class="dart-string">'Unknown'</span>;
+}
+
+<span class="comment">// Your app is running on: ${document.getElementById('platform-display').textContent}</span>`;
+            
+            document.querySelector('#platform-code code').innerHTML = exampleCode;
+        });
+    </script>
+</body>
+</html>
