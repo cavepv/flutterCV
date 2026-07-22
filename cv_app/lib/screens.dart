@@ -27,6 +27,14 @@ class AboutScreen extends StatelessWidget {
         Text(CvData.tagline, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 24),
         Text(CvData.about, style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 24),
+        Text('Languages', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 8),
+        for (final language in CvData.languages)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text('${language.name} — ${language.level}'),
+          ),
       ],
     );
   }

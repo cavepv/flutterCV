@@ -9,15 +9,30 @@ import 'package:cv_app/screens.dart';
 
 Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
+// ponytail: ListView only builds items within its viewport + cache extent,
+// so screens with long content need a tall test surface to render fully
+// (real usage is unaffected — users just scroll).
+Future<void> pumpTall(WidgetTester tester, Widget child) async {
+  tester.view.physicalSize = const Size(1200, 4000);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+  await tester.pumpWidget(wrap(child));
+  await tester.pump();
+}
+
 void main() {
   testWidgets('AboutScreen shows name and tagline', (tester) async {
-    await tester.pumpWidget(wrap(const AboutScreen()));
+    await pumpTall(tester, const AboutScreen());
     expect(find.text(CvData.name), findsOneWidget);
     expect(find.text(CvData.tagline), findsOneWidget);
+    for (final language in CvData.languages) {
+      expect(find.text('${language.name} — ${language.level}'), findsOneWidget);
+    }
   });
 
   testWidgets('ExperienceScreen lists every job', (tester) async {
-    await tester.pumpWidget(wrap(const ExperienceScreen()));
+    await pumpTall(tester, const ExperienceScreen());
     for (final job in CvData.experience) {
       expect(find.text(job.title), findsOneWidget);
     }
