@@ -1,0 +1,14 @@
+# The machine-wide ~/.gitignore blanket-ignores every dotfile/dotdir (`.*`),
+# which would otherwise silently hide files this repo intentionally tracks
+# (e.g. .github/, Flutter's own .metadata/.gitignore). Un-ignore them here
+# so `git status`/`git add -A` see them without needing `git add -f`.
+
+!.gitignore
+!.github
+!.github/**
+
+!cv_app/.gitignore
+!cv_app/.metadata
+!cv_app/android/.gitignore
+
+!openspec/**/.openspec.yaml
