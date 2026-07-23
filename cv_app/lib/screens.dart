@@ -15,16 +15,18 @@ class AboutScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const ClipOval(
-          child: SizedBox(
-            width: 96,
-            height: 96,
-            child: Image(
-              image: AssetImage('assets/images/profile.jpg'),
-              fit: BoxFit.cover,
-              // ponytail: portrait crop is taller than the circle; anchor to
-              // the top so the face stays framed instead of a random center-crop.
-              alignment: Alignment(0, -0.6),
+        const Center(
+          // ListView forces a tight full-width constraint on children, so the
+          // avatar needs Center to be free to size itself instead of stretching.
+          child: ClipOval(
+            child: SizedBox(
+              width: 96,
+              height: 96,
+              child: Image(
+                image: AssetImage('assets/images/profile.jpg'),
+                fit: BoxFit.cover,
+                alignment: Alignment(0, -0.6),
+              ),
             ),
           ),
         ),
