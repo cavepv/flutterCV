@@ -2,7 +2,7 @@ name: CV App CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ['v*']
     paths:
       - 'cv_app/**'
@@ -44,7 +44,7 @@ jobs:
 
   deploy-web:
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,9 +53,9 @@ jobs:
           channel: stable
       - run: flutter pub get
       # ponytail: base-href assumes GitHub Pages is served from the
-      # gh-pages branch at repo-root for a project page named "cv_app".
+      # gh-pages branch at repo-root for a project page named "flutterCV".
       # Adjust if Pages is configured differently.
-      - run: flutter build web --base-href /cv_app/
+      - run: flutter build web --base-href /flutterCV/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
