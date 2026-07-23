@@ -42,14 +42,32 @@ class CvData {
   static const String name = 'Carlos Palomeque Vela';
   static const String tagline = 'Senior Software Engineer';
   static const String about =
-      'Over 10 years of professional experience with a broad technical '
-      'background in Android Automotive OS, Embedded/RTOS, C/C++, Java, '
-      'Kotlin, and Android app development. Worked with both product and '
-      'consultancy companies including Volvo Cars, CPAC Systems, Epiroc '
-      'Rocktec, and Volvo Construction Equipment. Enjoys technically '
-      'challenging projects, always with a user-experience-first mindset, '
-      'and values collaborating, sharing knowledge, and helping the team '
-      'thrive. Native Swedish speaker, fluent in English and Spanish.';
+      'With over 10 years of professional experience, I have a broad technical '
+      'background working with Android Automotive OS, Embedded/RTOS, C/C++, Java, '
+      'Kotlin, and Android App development. I\'ve worked with both product and '
+      'consultancy companies and enjoy technically challenging projects. I find it '
+      'rewarding to identify and strengthen the team\'s areas of improvement and '
+      'together excel and achieve set goals together.\n\n'
+      'I like speaking with customers and even though often found in back-end work — '
+      'always keeping close to the product, always with a user-experience-first '
+      'mindset. Collaborating with other developers, discussing ideas, sharing '
+      'knowledge, and helping each thrive and develop is something that I truly '
+      'enjoy and value in a workplace.\n\n'
+      'I\'m born and raised in Sweden — native Swedish speaker, but also fluent in '
+      'English and Spanish. I\'ve had the pleasure to work with prestigious companies '
+      'such as Volvo Cars, CPAC Systems, Epiroc Rocktec Division, and Volvo '
+      'Construction Equipment, where I\'ve developed my skills in Java, Kotlin, C++, '
+      'Python, AOSP/Android Automotive OS, and Real-time/event driven operating '
+      'systems (RTOS) among others.\n\n'
+      'With much curiosity I consider myself a native LLM/AI user and have adopted '
+      'and come to love specification and test-driven development (OpenSpec and '
+      'Caveman framework) through LLM usage. Current harnesses of choice are '
+      'CoPilot CLI and PI/Caveman-code. I\'m constantly exploring and testing the '
+      'field of AI and how to best use these tools as a signal amplifier/leverage my '
+      'years of software development experience. Well aware of the non-deterministic '
+      'nature of LLMs vs. traditional compilers, but given clear intent, '
+      'requirements, fixed set of goals, years of experience as context, the output '
+      'result will amplify this.';
 
   static const String email = 'carlos.palomeque.vela@gmail.com';
   static const String phone = '+46 76 868 92 99';

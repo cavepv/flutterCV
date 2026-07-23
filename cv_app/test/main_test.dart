@@ -14,7 +14,7 @@ void main() {
 
   testWidgets('bottom nav switches to Experience tab', (tester) async {
     await tester.pumpWidget(const CvApp());
-    await tester.tap(find.text('Experience'));
+    await tester.tap(find.text('Previous work experience'));
     await tester.pumpAndSettle();
     expect(find.text(CvData.experience.first.title), findsOneWidget);
   });

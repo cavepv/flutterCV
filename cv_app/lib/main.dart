@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     ContactScreen(),
   ];
 
-  static const _titles = ['About', 'Experience', 'Skills', 'Education', 'Contact'];
+  static const _titles = ['About', 'Previous work experience', 'Skills', 'Education', 'Contact'];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         onDestinationSelected: (i) => setState(() => _index = i),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.person), label: 'About'),
-          NavigationDestination(icon: Icon(Icons.work), label: 'Experience'),
+          NavigationDestination(icon: Icon(Icons.work), label: 'Previous work experience'),
           NavigationDestination(icon: Icon(Icons.star), label: 'Skills'),
           NavigationDestination(icon: Icon(Icons.school), label: 'Education'),
           NavigationDestination(icon: Icon(Icons.contact_mail), label: 'Contact'),

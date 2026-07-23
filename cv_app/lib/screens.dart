@@ -17,10 +17,7 @@ class AboutScreen extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 48,
-          child: Text(
-            CvData.name.substring(0, 1),
-            style: const TextStyle(fontSize: 36),
-          ),
+          backgroundImage: const AssetImage('assets/images/profile.jpg'),
         ),
         const SizedBox(height: 16),
         Text(CvData.name, style: Theme.of(context).textTheme.headlineMedium),
