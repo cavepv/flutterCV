@@ -27,6 +27,21 @@ jobs:
       - run: flutter analyze
       - run: flutter test
 
+  build-ios:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      # ponytail: --no-codesign proves the iOS build compiles without an
+      # Apple Developer account. Not installable on a device — that needs
+      # signing certs/provisioning profiles as CI secrets, add if you pay
+      # for an Apple Developer account.
+      - run: flutter build ios --release --no-codesign
+
   deploy-web:
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'

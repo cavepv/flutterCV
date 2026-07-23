@@ -37,9 +37,11 @@ flutter run -d chrome         # hot-reload dev loop, needs a real browser
 ```
 
 CI (`.github/workflows/cv_app.yml`) runs `flutter analyze` + `flutter test`
-on every push/PR touching `cv_app/**`; on push to `main` it also builds web
-and deploys to the `gh-pages` branch; on `v*` tags it builds and releases an
-APK.
+on every push/PR touching `cv_app/**`, plus an unsigned `flutter build ios
+--no-codesign` on `macos-latest` (proves the iOS build compiles — no Apple
+Developer account, not installable on a device); on push to `main` it also
+builds web and deploys to the `gh-pages` branch; on `v*` tags it builds and
+releases an APK.
 
 ## Architecture
 
