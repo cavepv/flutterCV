@@ -11,6 +11,9 @@ on:
     paths:
       - 'cv_app/**'
 
+permissions:
+  contents: write
+
 defaults:
   run:
     working-directory: cv_app
