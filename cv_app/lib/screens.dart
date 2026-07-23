@@ -20,8 +20,8 @@ class AboutScreen extends StatelessWidget {
           // avatar needs Center to be free to size itself instead of stretching.
           child: ClipOval(
             child: SizedBox(
-              width: 96,
-              height: 96,
+              width: 130,
+              height: 130,
               child: Image(
                 image: AssetImage('assets/images/profile.jpg'),
                 fit: BoxFit.cover,
