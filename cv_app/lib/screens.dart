@@ -15,9 +15,18 @@ class AboutScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        CircleAvatar(
-          radius: 48,
-          backgroundImage: const AssetImage('assets/images/profile.jpg'),
+        const ClipOval(
+          child: SizedBox(
+            width: 96,
+            height: 96,
+            child: Image(
+              image: AssetImage('assets/images/profile.jpg'),
+              fit: BoxFit.cover,
+              // ponytail: portrait crop is taller than the circle; anchor to
+              // the top so the face stays framed instead of a random center-crop.
+              alignment: Alignment(0, -0.6),
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         Text(CvData.name, style: Theme.of(context).textTheme.headlineMedium),
