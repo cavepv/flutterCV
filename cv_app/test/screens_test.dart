@@ -3,9 +3,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:url_launcher_platform_interface/link.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'package:cv_app/cv_data.dart';
 import 'package:cv_app/screens.dart';
+
+class _FakeUrlLauncher extends UrlLauncherPlatform {
+  final launched = <String>[];
+
+  @override
+  LinkDelegate? get linkDelegate => null;
+
+  @override
+  Future<bool> canLaunch(String url) async => true;
+
+  @override
+  Future<bool> launchUrl(String url, LaunchOptions options) async {
+    launched.add(url);
+    return true;
+  }
+}
 
 Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
@@ -81,5 +99,27 @@ void main() {
     expect(find.text(CvData.phone), findsOneWidget);
     expect(find.text('LinkedIn'), findsOneWidget);
     expect(find.text('GitHub'), findsOneWidget);
+  });
+
+  testWidgets('ContactScreen taps launch the expected URIs', (tester) async {
+    final fake = _FakeUrlLauncher();
+    UrlLauncherPlatform.instance = fake;
+    await tester.pumpWidget(wrap(const ContactScreen()));
+
+    await tester.tap(find.text('Email'));
+    await tester.tap(find.text('Phone'));
+    await tester.tap(find.text('LinkedIn'));
+    await tester.tap(find.text('GitHub'));
+    await tester.pumpAndSettle();
+
+    // launchUrl round-trips through Uri.parse/toString, which percent-encodes
+    // spaces — compare parsed Uris instead of raw strings to avoid that noise.
+    final expected = [
+      'mailto:${CvData.email}',
+      'tel:${CvData.phone}',
+      CvData.linkedInUrl,
+      CvData.githubUrl,
+    ];
+    expect(fake.launched.map(Uri.parse), expected.map(Uri.parse));
   });
 }

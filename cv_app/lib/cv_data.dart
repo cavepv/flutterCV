@@ -81,6 +81,7 @@ class CvData {
   static const String linkedInUrl =
       'https://www.linkedin.com/in/carlos-palomeque-vela-38771711a';
   static const String githubUrl = 'https://github.com/cavepv';
+  static const String driversLicense = 'B (since 2005)';
 
   static const List<Job> experience = [
     Job(

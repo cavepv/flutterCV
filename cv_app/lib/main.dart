@@ -43,20 +43,35 @@ class _HomePageState extends State<HomePage> {
 
   static const _titles = ['About', 'Previous work experience', 'Skills', 'Education', 'Contact'];
 
+  static const _navLabels = ['About', 'Experience', 'Skills', 'Education', 'Contact'];
+
+  static const _navIcons = [
+    Icons.person,
+    Icons.work,
+    Icons.star,
+    Icons.school,
+    Icons.contact_mail,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_titles[_index])),
-      body: IndexedStack(index: _index, children: _screens),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 700),
+          child: IndexedStack(index: _index, children: _screens),
+        ),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.person), label: 'About'),
-          NavigationDestination(icon: Icon(Icons.work), label: 'Previous work experience'),
-          NavigationDestination(icon: Icon(Icons.star), label: 'Skills'),
-          NavigationDestination(icon: Icon(Icons.school), label: 'Education'),
-          NavigationDestination(icon: Icon(Icons.contact_mail), label: 'Contact'),
+        destinations: [
+          for (var i = 0; i < _navLabels.length; i++)
+            NavigationDestination(
+              icon: Icon(_navIcons[i]),
+              label: _navLabels[i],
+            ),
         ],
       ),
     );

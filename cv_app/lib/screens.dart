@@ -13,7 +13,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       children: [
         const Center(
           // ListView forces a tight full-width constraint on children, so the
@@ -26,6 +26,7 @@ class AboutScreen extends StatelessWidget {
                 image: AssetImage('assets/images/profile.jpg'),
                 fit: BoxFit.cover,
                 alignment: Alignment(0, -0.6),
+                semanticLabel: 'Profile photo of ${CvData.name}',
               ),
             ),
           ),
@@ -44,7 +45,8 @@ class AboutScreen extends StatelessWidget {
             child: Text('${language.name} — ${language.level}'),
           ),
         const SizedBox(height: 24),
-        Text('Drivers license: B since 2005', style: Theme.of(context).textTheme.titleMedium),
+        Text("Driver's license: ${CvData.driversLicense}",
+            style: Theme.of(context).textTheme.bodyLarge),
       ],
     );
   }
@@ -216,11 +218,13 @@ class ContactScreen extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.link),
           title: const Text('LinkedIn'),
+          subtitle: Text(CvData.linkedInUrl),
           onTap: () => _open(CvData.linkedInUrl),
         ),
         ListTile(
           leading: const Icon(Icons.code),
           title: const Text('GitHub'),
+          subtitle: Text(CvData.githubUrl),
           onTap: () => _open(CvData.githubUrl),
         ),
       ],

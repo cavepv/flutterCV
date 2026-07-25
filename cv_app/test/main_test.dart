@@ -14,9 +14,23 @@ void main() {
 
   testWidgets('bottom nav switches to Experience tab', (tester) async {
     await tester.pumpWidget(const CvApp());
-    await tester.tap(find.text('Previous work experience'));
+    await tester.tap(find.text('Experience'));
     await tester.pumpAndSettle();
     expect(find.text(CvData.experience.first.title), findsOneWidget);
+  });
+
+  testWidgets('bottom nav switches to Skills tab', (tester) async {
+    await tester.pumpWidget(const CvApp());
+    await tester.tap(find.text('Skills'));
+    await tester.pumpAndSettle();
+    expect(find.text(CvData.skills.first.category), findsOneWidget);
+  });
+
+  testWidgets('bottom nav switches to Education tab', (tester) async {
+    await tester.pumpWidget(const CvApp());
+    await tester.tap(find.text('Education'));
+    await tester.pumpAndSettle();
+    expect(find.text(CvData.education.first.degree), findsOneWidget);
   });
 
   testWidgets('bottom nav switches to Contact tab', (tester) async {
