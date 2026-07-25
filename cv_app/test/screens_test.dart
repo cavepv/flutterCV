@@ -34,8 +34,16 @@ void main() {
   testWidgets('ExperienceScreen lists every job', (tester) async {
     await pumpTall(tester, const ExperienceScreen());
     for (final job in CvData.experience) {
-      expect(find.text(job.title), findsOneWidget);
+      expect(find.text('${job.company} · ${job.period}'), findsOneWidget);
     }
+  });
+
+  testWidgets('ExperienceScreen shows a company icon per companyIcons entry',
+      (tester) async {
+    await pumpTall(tester, const ExperienceScreen());
+    final totalIcons =
+        CvData.experience.fold<int>(0, (sum, job) => sum + job.companyIcons.length);
+    expect(find.byType(CircleAvatar), findsNWidgets(totalIcons));
   });
 
   testWidgets('SkillsScreen shows every skill as a chip', (tester) async {

@@ -43,9 +43,18 @@ class AboutScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4),
             child: Text('${language.name} — ${language.level}'),
           ),
+        const SizedBox(height: 24),
+        Text('Drivers license: B since 2005', style: Theme.of(context).textTheme.titleMedium),
       ],
     );
   }
+}
+
+// ponytail: initials avatar stands in for a company logo image — no
+// trademarked assets to source/bundle, upgrade to real logos if provided.
+String _initials(String name) {
+  final words = name.split(RegExp(r'\s+')).where((w) => w.isNotEmpty);
+  return words.take(2).map((w) => w[0].toUpperCase()).join();
 }
 
 class ExperienceScreen extends StatelessWidget {
@@ -68,6 +77,22 @@ class ExperienceScreen extends StatelessWidget {
                 Text(job.title, style: Theme.of(context).textTheme.titleLarge),
                 Text('${job.company} · ${job.period}',
                     style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    for (final name in job.companyIcons)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Tooltip(
+                          message: name,
+                          child: CircleAvatar(
+                            radius: 16,
+                            child: Text(_initials(name)),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 const SizedBox(height: 8),
                 for (final h in job.highlights)
                   Padding(

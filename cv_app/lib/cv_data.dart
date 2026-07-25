@@ -7,12 +7,16 @@ class Job {
   final String company;
   final String period;
   final List<String> highlights;
+  // ponytail: names only, not logo image assets — avoids bundling
+  // trademarked company logos; UI renders initials avatars from these.
+  final List<String> companyIcons;
 
   const Job({
     required this.title,
     required this.company,
     required this.period,
     required this.highlights,
+    required this.companyIcons,
   });
 }
 
@@ -43,31 +47,34 @@ class CvData {
   static const String tagline = 'Senior Software Engineer';
   static const String about =
       'With over 10 years of professional experience, I have a broad technical '
-      'background working with Android Automotive OS, Embedded/RTOS, C/C++, Java, '
-      'Kotlin, and Android App development. I\'ve worked with both product and '
+      'background working with Android Automotive OS, Embedded/RTOS, System design '
+      ' and architecture and app development. I\'ve worked with both product and '
       'consultancy companies and enjoy technically challenging projects. I find it '
       'rewarding to identify and strengthen the team\'s areas of improvement and '
       'together excel and achieve set goals together.\n\n'
-      'I like speaking with customers and even though often found in back-end work — '
-      'always keeping close to the product, always with a user-experience-first '
-      'mindset. Collaborating with other developers, discussing ideas, sharing '
+      'I always try to have a close dialog and collaboration with the end-user/customer '
+      'and keep a user-experience-first mindset, and not remain isolated in the in-office '
+      'development context. Collaborating with other developers, discussing ideas, sharing '
       'knowledge, and helping each thrive and develop is something that I truly '
       'enjoy and value in a workplace.\n\n'
-      'I\'m born and raised in Sweden — native Swedish speaker, but also fluent in '
-      'English and Spanish. I\'ve had the pleasure to work with prestigious companies '
+      'I\'ve had the pleasure to work with prestigious companies '
       'such as Volvo Cars, CPAC Systems, Epiroc Rocktec Division, and Volvo '
       'Construction Equipment, where I\'ve developed my knowledge in systems design and '
-      'architecture and skills in Java, Kotlin, C++, Python, AOSP/Android Automotive OS, '
-      'and Real-time (RTOS) and event driven operating systems .\n\n'
-      'With much curiosity I consider myself a native LLM/AI user and have adopted '
-      'and come to love specification and test-driven development (OpenSpec and '
-      'Caveman framework) through LLM usage. Current harnesses of choice are '
+      'architecture and refined my skillset in event driven operating systems such as '
+      ' AOSP/Android Automotive OS and also Real-time (RTOS) based in a embedded context.\n\n'
+      'I consider myself a native LLM/AI user and follow this topic '
+      'with great interest and curiosity. I have adopted and come to love the '
+      'specification and test-driven development (OpenSpec and '
+      'Caveman framework) approach to LLM usage. Current harnesses of choice are '
       'CoPilot CLI and PI/Caveman-code. I\'m constantly exploring and testing the '
       'field of AI and how to best use these tools as a signal amplifier/leverage my '
       'years of software development experience. Well aware of the non-deterministic '
       'nature of LLMs vs. traditional compilers, but given clear intent, '
       'requirements, fixed set of goals, years of experience as context, the output '
-      'result will amplify this.';
+      'result will amplify this.\n\n'
+      'I\'m born and raised in Eskilstuna, Sweden — native Swedish speaker, but also fluent in '
+      'English and Spanish (both parents from Bolivia). I now live in Gothenburg with my wife '
+      'and our two children.';
 
   static const String email = 'carlos.palomeque.vela@gmail.com';
   static const String phone = '+46 76 868 92 99';
@@ -83,57 +90,65 @@ class CvData {
       highlights: [
         'Infotainment platforms SPA1/SPA2/SPA3: driver personalization, '
             'multiuser/profile management and onboarding on Android Automotive OS',
-        'Drove test-driven development: automated unit tests, on-target '
-            'instrumentation tests, and Pytest component tests in Jenkins CI',
-        'Collaborated with Google dev teams on Automotive Services issues, '
+        'Drove test-driven development best-practices in the team: '
+            'automated unit tests, on-target instrumentation tests, and Pytest component tests in Jenkins CI',
+        'UI components in industrialized context in close collaboration with UX '
+          'team to handle and implement multiple screen sizes and layouts, right/left hand drive,'
+          'right-to-left text, and multi-language handling',
+        'Collaborated with Google dev.teams on Automotive Services issues, '
             'using CTS/xTS certification testing via Trade Federation',
-        'Improved UI/onboarding components with MVVM + StateFlow',
+        'Improved UI/onboarding components (ViewModel) with MVVM + StateFlow',
       ],
+      companyIcons: ['Volvo Cars', 'Acorn Technology'],
     ),
     Job(
       title: 'Software Engineer',
       company: 'CPAC Systems',
       period: '2019 — 2024',
       highlights: [
-        'Android platform team: AOSP/Android Automotive OS foundation and '
-            'back-end for Volvo Co-Pilot 2 (1st & 2nd gen), SOP late 2023',
-        'Full-stack work from factory production support to Python tooling '
-            'and native C++, incl. IEEE754 floating point encode/decode',
+        'Android Automotive OS platform team: AOSP/Android Automotive OS foundation and '
+            'back-end for Volvo Co-Pilot (1st & 2nd gen - SOP late 2023).',
+        'Full-stack work covering everything from factory production support (EOL & FCT testers) to Python tooling '
+            'and native C++, incl. IEEE754 floating point encode/decode implementation.',
         'App development alongside platform/back-end work in a GNU/Linux '
             'environment',
+        'I really enjoyed the mix and challenges of working in a mid-sized product company where both the pressure and rewards come down to the effort of you and the team.',
       ],
+      companyIcons: ['CPAC Systems'],
     ),
     Job(
-      title: 'Software Engineer Consultant (Epiroc Rocktec Division)',
-      company: 'Alten Sweden',
+      title: 'Software Engineer Consultant',
+      company: 'Epiroc Rocktec Division (via Alten Sweden)',
       period: '2017.09 — 2019.02',
       highlights: [
-        'Embedded C++14 development for the EU-funded SIMS project: '
-            'battery-powered underground mining machines',
-        'Implemented electrified drive-train code: power control component, '
-            'GUI/Qt widgets, and manager state machines (power, battery)',
-        'J1939/CAN related development',
+        'Embedded C++14 development',
+        'Part of the Epiroc battery/SIMS team of 10 people developing their new battery '
+        'powered underground mining machines for the EU-funded SIMS project: https://www.simsmining.eu/',
+        'Implemented electrified drive-train related code: power control component state machine (power, battery) managers, '
+            'UI/Qt widgets, and J1939/CAN related components',
       ],
+      companyIcons: ['Epiroc Rocktec Division', 'Alten Sweden'],
     ),
     Job(
       title: 'Software Developer Consultant',
-      company: 'Combitech Sverige (for Volvo Construction Equipment)',
+      company: 'Volvo Construction Equipment (via Combitech Sverige)',
       period: '2013.12 — 2017.07',
       highlights: [
-        'Embedded software in a Windows environment; back-end C programming '
+        'Embedded software development for RTOS (RubusVS) in a Windows environment; back-end C programming '
             'and maintenance of machine ECU code',
-        'Target debugging with Trace32, communication protocol code, '
+        'Target debugging with Trace32, communication protocol code (J1587 & J1939), '
             'ClearCase configuration management',
         'Interfaced with project managers for sprint planning; collaborated '
             'with global teams (US, India, France)',
       ],
+      companyIcons: ['Combitech Sverige', 'Volvo Construction Equipment'],
     ),
   ];
 
   static const List<SkillGroup> skills = [
     SkillGroup(
       category: 'Languages',
-      items: ['Java', 'Kotlin', 'C++', 'C', 'Python', 'C#', 'JavaScript'],
+      items: ['Java', 'Kotlin', 'C++', 'C', 'Python', 'C#', 'JavaScript', 'SQL', 'Bash', 'HTML/CSS'],
     ),
     SkillGroup(
       category: 'Frameworks & Platforms',
@@ -142,9 +157,14 @@ class CvData {
         'AOSP/Android Automotive OS',
         'RTOS',
         'GNU/Linux',
+        'atest',
+        'LinuxSE policy',
         'Qt',
+        'CTS/xTS (Trade Federation)',
         'StateFlow',
+        'Pytest',
         'MVVM',
+        'J1939/CAN',
       ],
     ),
     SkillGroup(
@@ -152,11 +172,20 @@ class CvData {
       items: [
         'Jenkins',
         'Gerrit',
-        'Pytest',
-        'CTS/xTS (Trade Federation)',
         'ClearCase',
         'Trace32',
-        'J1939/CAN',
+        'Git',
+        'SVN',
+        'Mercurial',
+        'Docker',
+        'Gradle',
+        'Figma',
+        'GitHub Actions',
+        'GitLab CI/CD',
+        'Make',
+        'CMake',
+        'Jira',
+        'Confluence',
       ],
     ),
   ];
