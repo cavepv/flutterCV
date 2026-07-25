@@ -48,12 +48,12 @@ class CvData {
   static const String about =
       'With over 10 years of professional experience, I have a broad technical '
       'background working with Android Automotive OS, Embedded/RTOS, System design '
-      ' and architecture and app development. I\'ve worked with both product and '
+      'and architecture and app development. I\'ve worked with both product and '
       'consultancy companies and enjoy technically challenging projects. I find it '
       'rewarding to identify and strengthen the team\'s areas of improvement and '
       'together excel and achieve set goals together.\n\n'
       'I always try to have a close dialog and collaboration with the end-user/customer '
-      'and keep a user-experience-first mindset, and not remain isolated in the in-office '
+      'and keep a user-experience-first mindset, and not remain isolated in the '
       'development context. Collaborating with other developers, discussing ideas, sharing '
       'knowledge, and helping each thrive and develop is something that I truly '
       'enjoy and value in a workplace.\n\n'
@@ -61,7 +61,7 @@ class CvData {
       'such as Volvo Cars, CPAC Systems, Epiroc Rocktec Division, and Volvo '
       'Construction Equipment, where I\'ve developed my knowledge in systems design and '
       'architecture and refined my skillset in event driven operating systems such as '
-      ' AOSP/Android Automotive OS and also Real-time (RTOS) based in a embedded context.\n\n'
+      'AOSP/Android Automotive OS and also Real-time (RTOS) based in a embedded context.\n\n'
       'I consider myself a native LLM/AI user and follow this topic '
       'with great interest and curiosity. I have adopted and come to love the '
       'specification and test-driven development (OpenSpec and '
@@ -93,9 +93,9 @@ class CvData {
         'Drove test-driven development best-practices in the team: '
             'automated unit tests, on-target instrumentation tests, and Pytest component tests in Jenkins CI',
         'UI components in industrialized context in close collaboration with UX '
-          'team to handle and implement multiple screen sizes and layouts, right/left hand drive,'
+          'team to handle and implement multiple screen sizes and layouts, right/left hand drive, '
           'right-to-left text, and multi-language handling',
-        'Collaborated with Google dev.teams on Automotive Services issues, '
+        'Collaborated with Google dev teams on Automotive Services issues, '
             'using CTS/xTS certification testing via Trade Federation',
         'Improved UI/onboarding components (ViewModel) with MVVM + StateFlow',
       ],
@@ -112,7 +112,7 @@ class CvData {
             'and native C++, incl. IEEE754 floating point encode/decode implementation.',
         'App development alongside platform/back-end work in a GNU/Linux '
             'environment',
-        'I really enjoyed the mix and challenges of working in a mid-sized product company where both the pressure and rewards come down to the effort of you and the team.',
+        'Really enjoyed the mix and challenges of working in a mid-sized product company where both the pressure and rewards come down to the effort of you and the team.',
       ],
       companyIcons: ['CPAC Systems'],
     ),

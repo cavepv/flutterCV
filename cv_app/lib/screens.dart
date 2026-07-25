@@ -57,9 +57,39 @@ String _initials(String name) {
   return words.take(2).map((w) => w[0].toUpperCase()).join();
 }
 
+// ponytail: derived from each job's period start year instead of a
+// hardcoded number — stays correct every year, no manual bump needed.
+int _yearsOfExperience(List<Job> jobs) {
+  final startYears = jobs.map(
+    (j) => int.parse(RegExp(r'\d{4}').firstMatch(j.period)!.group(0)!),
+  );
+  return DateTime.now().year - startYears.reduce((a, b) => a < b ? a : b);
+}
+
 class ExperienceScreen extends StatelessWidget {
   const ExperienceScreen({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '${_yearsOfExperience(CvData.experience)}+ years of professional experience',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+        ),
+        Expanded(child: _ExperienceList()),
+      ],
+    );
+  }
+}
+
+class _ExperienceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(

@@ -38,6 +38,18 @@ void main() {
     }
   });
 
+  testWidgets('ExperienceScreen shows a computed years-of-experience header',
+      (tester) async {
+    await pumpTall(tester, const ExperienceScreen());
+    final startYears = CvData.experience.map(
+      (j) => int.parse(RegExp(r'\d{4}').firstMatch(j.period)!.group(0)!),
+    );
+    final expectedYears =
+        DateTime.now().year - startYears.reduce((a, b) => a < b ? a : b);
+    expect(find.text('$expectedYears+ years of professional experience'),
+        findsOneWidget);
+  });
+
   testWidgets('ExperienceScreen shows a company icon per companyIcons entry',
       (tester) async {
     await pumpTall(tester, const ExperienceScreen());
